@@ -44,7 +44,6 @@ import slider_imgs from "../../components/common/swiper/slider_imgs";
     },
     created() {
       getHomeMultidata().then(res => {
-        console.log(res);
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
       });
