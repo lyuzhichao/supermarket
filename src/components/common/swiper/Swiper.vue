@@ -42,7 +42,6 @@
         swipe: 0,
         swiperatio: 0.25,
         distance: 0,
-        currentIndex:1
       }
     },
     components: {
