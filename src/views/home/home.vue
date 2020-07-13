@@ -4,15 +4,18 @@
       <div slot="center">Shopping Mall</div>
     </navBar>
 <!--  <homeSwiper :cbanners="banners"></homeSwiper>-->
-    <swiper_test>
-      <swiper_item_test>
-        <slider_imgs v-for="item in banners">
-          <a :href="item.link">
-            <img :src="item.image" alt="" class="slider-img">
-          </a>
-        </slider_imgs>
+    <swiper_test :cbanners="banners">
+<!--      <swiper_item_test>-->
+<!--        <slider_imgs v-for="item in banners">-->
+<!--          <a :href="item.link">-->
+<!--            <img :src="item.image" alt="" class="slider-img">-->
+<!--          </a>-->
+<!--        </slider_imgs>-->
+<!--      </swiper_item_test>-->
+<!--      <swiper_indicator>-->
+<!--        <div v-for="index in banners" class="indocators"></div>-->
+<!--      </swiper_indicator>-->
 
-      </swiper_item_test>
     </swiper_test>
   </div>
 
@@ -23,8 +26,7 @@
   import {getHomeMultidata} from "../../network/home";
 import homeSwiper from "./homecomponents/homeswiper";
 import swiper_test from "../../components/common/swiper/swiper_test";
-import swiper_item_test from "../../components/common/swiper/swiper_item_test";
-import slider_imgs from "../../components/common/swiper/slider_imgs";
+
 
   export default {
     name: "home",
@@ -39,8 +41,6 @@ import slider_imgs from "../../components/common/swiper/slider_imgs";
       navBar,
       homeSwiper,
       swiper_test,
-      swiper_item_test,
-      slider_imgs
     },
     created() {
       getHomeMultidata().then(res => {
