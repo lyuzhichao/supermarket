@@ -10,7 +10,7 @@
       </swiper_item_test>
     </div>
     <swiper_indicator>
-      <div v-for="(item,index) in cbanners" class="indicator-item" :key="index"></div>
+      <div v-for="(item,index) in cbanners" :class="{active:index===timecount-1}" class="indicator-item"  :key="index"></div>
     </swiper_indicator>
   </div>
 </template>
@@ -19,36 +19,39 @@
   import swiper_item_test from "./swiper_item_test";
   import slider_imgs from "./slider_imgs";
   import swiper_indicator from "./swiper_indicator";
-
-  let params = {
-    timecount: 1,
-    startx: 0,
-    swipe: 0,
-    swiperatio: 0.25,
-    distance: 0,
-  }
+  
   export default {
     name: "swiperTest",
     props: {
       cbanners: {
         type: Array,
         default: []
+      },
+    },
+    mounted() {
+      setTimeout(()=>{
+        this.addNode();
+        this.moveImg();
+        this.restart_slider();
+      },200)
+    },
+    data:function(){
+      return {
+        timecount: 1,
+        startx: 0,
+        swipe: 0,
+        swiperatio: 0.25,
+        distance: 0,
+        currentIndex:1
       }
     },
-
     components: {
       swiper_item_test,
       slider_imgs,
       swiper_indicator
     },
-    updated() {
-      this.addNode();
-      this.moveImg();
-      this.restart_slide();
-    },
 
     computed: {
-
       getNum: function () {
         let slider_img = document.getElementsByClassName('slider-img');
         return slider_img.length;
@@ -67,90 +70,91 @@
       moveImg() {
         let slider_item = document.querySelector('.slider-item')
         let img_num = this.getNum;
-        let timeMaker = setInterval(function () {
-          params.timecount++
-          if (params.timecount < img_num - 1) {
+        let that=this;
+        let timeMaker = setInterval( ()=> {
+          that.timecount++
+          if (that.timecount < img_num - 1) {
             slider_item.style.transition = '1s'
-            slider_item.style.left = -window.innerWidth * params.timecount + 'px'
+            slider_item.style.left = -window.innerWidth * that.timecount + 'px'
 
           } else {
             slider_item.style.transition = '1s'
-            slider_item.style.left = -window.innerWidth * params.timecount + 'px'
+            slider_item.style.left = -window.innerWidth * that.timecount + 'px'
             setTimeout(function () {
               slider_item.style.transition = '0s'
               slider_item.style.left = -window.innerWidth + 'px'
             }, 900)
-            params.timecount = 1
+            that.timecount = 1
           }
         }, 1500);
-        this.stop_slide(timeMaker)
+        this.stop_slider(timeMaker)
       },
-      stop_slide(timer_id) {
+      stop_slider(timer_id) {
         let slider_item = document.querySelector('.slider-item')
         let that = this
         slider_item.addEventListener('touchstart', function (e) {
           window.clearInterval(timer_id)
-          params.startx = e.touches[0].pageX
-          that.drag_slide()
+          that.startx = e.touches[0].pageX
+          that.drag_slider()
         })
       },
-      restart_slide() {
+      restart_slider() {
         let slider_item = document.querySelector('.slider-item')
         let img_num = this.getNum;
         let that = this
         slider_item.addEventListener('touchend', function () {
-          if (params.swipe >= params.swiperatio) {
-            params.timecount--
-            if (params.timecount >= 1) {
+          if (that.swipe >= that.swiperatio) {
+            that.timecount--
+            if (that.timecount >= 1) {
               slider_item.style.transition = '0.2s'
-              slider_item.style.left = -window.innerWidth * params.timecount + 'px'
+              slider_item.style.left = -window.innerWidth * that.timecount + 'px'
             } else {
               slider_item.style.transition = '0.2s'
-              slider_item.style.left = -window.innerWidth * params.timecount + 'px'
+              slider_item.style.left = -window.innerWidth * that.timecount + 'px'
               setTimeout(function () {
                 slider_item.style.transition = '0s'
                 slider_item.style.left = -window.innerWidth * (img_num - 2) + 'px'
               }, 100)
-              params.timecount = img_num - 2
+              that.timecount = img_num - 2
             }
-          } else if (params.swipe <= -params.swiperatio) {
-            params.timecount++
-            if (params.timecount < img_num - 1) {
+          } else if (that.swipe <= -that.swiperatio) {
+            that.timecount++
+            if (that.timecount < img_num - 1) {
               slider_item.style.transition = '0.2s'
-              slider_item.style.left = -window.innerWidth * params.timecount + 'px'
+              slider_item.style.left = -window.innerWidth * that.timecount + 'px'
 
-            } else if (params.timecount === img_num - 1) {
+            } else if (that.timecount === img_num - 1) {
               slider_item.style.transition = '0.2s'
-              slider_item.style.left = -window.innerWidth * params.timecount + 'px'
+              slider_item.style.left = -window.innerWidth * that.timecount + 'px'
 
               setTimeout(function () {
                 slider_item.style.transition = '0s'
                 slider_item.style.left = -window.innerWidth + 'px'
               }, 100)
-              params.timecount = 1
+              that.timecount = 1
             } else {
-              params.timecount = 0
+              that.timecount = 0
             }
           } else {
             slider_item.style.transition = '0.2s'
-            slider_item.style.left = -window.innerWidth * (params.timecount) + 'px'
+            slider_item.style.left = -window.innerWidth * (that.timecount) + 'px'
           }
           setTimeout(that.moveImg(), 1000)
         })
       },
-      drag_slide() {
+      drag_slider() {
         let slider_item = document.querySelector('.slider-item')
         let that = this
         slider_item.addEventListener('touchmove', function (e) {
           e.preventDefault()
           let currentx = e.touches[0].pageX
-          let distance = currentx - params.startx
-          params.swipe = distance / window.innerWidth
-          if (params.timecount === 5) {
-            params.timecount = 1
+          let distance = currentx - that.startx
+          that.swipe = distance / window.innerWidth
+          if (that.timecount === 5) {
+            that.timecount = 1
           }
           slider_item.style.transition = '0s'
-          slider_item.style.left = -params.timecount * window.innerWidth + distance + 'px'
+          slider_item.style.left = -that.timecount * window.innerWidth + distance + 'px'
         })
 
       }
