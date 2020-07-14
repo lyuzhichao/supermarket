@@ -3,8 +3,9 @@
     <navBar class="home-nav">
       <div slot="center">Shopping Mall</div>
     </navBar>
-    <swiper_test :cbanners="banners">
-    </swiper_test>
+    <swiper :cbanners="banners">
+    </swiper>
+    <homeRecommendView :recommends="recommends"></homeRecommendView>
   </div>
 
 </template>
@@ -12,8 +13,8 @@
 <script>
   import navBar from "../../components/common/navbar/navBar";
   import {getHomeMultidata} from "../../network/home";
-  import swiper_test from "../../components/common/swiper/Swiper";
-
+  import swiper from "../../components/common/swiper/Swiper";
+  import homeRecommendView from "./homecomponents/homeRecommendView";
 
   export default {
     name: "home",
@@ -26,7 +27,8 @@
     ,
     components: {
       navBar,
-      swiper_test,
+      swiper,
+      homeRecommendView
     },
     created() {
       getHomeMultidata().then(res => {

@@ -33,7 +33,7 @@
         this.addNode();
         this.moveImg();
         this.restart_slider();
-      },200)
+      },250)
     },
     data:function(){
       return {
